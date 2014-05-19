@@ -207,6 +207,18 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="character"
+			>
+			<File
+				RelativePath=".\Kirby.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Kirby.h"
+				>
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>

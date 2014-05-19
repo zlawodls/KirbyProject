@@ -1,5 +1,13 @@
 #include "MainSystem.h"
+Mainsys::Mainsys()
+{
 
+	
+}
+void Mainsys::Start(DWORD dwStyle)
+{
+	SetWindowStyle(dwStyle);
+}
 void Mainsys::Input(DWORD)
 {
 }
