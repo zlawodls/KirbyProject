@@ -17,12 +17,16 @@ class MainWindow
 public :
 	MainWindow()
 		: szClassName(_T("MainWindowClass"))
-		, width(800), height(600)
+		, width(400), height(400)
 		, dwStyle(WS_OVERLAPPEDWINDOW)
 		, szWindowTitle(NULL)
 		, hMainWnd(NULL)
 		, hMainDC(NULL)
 	{
+	}
+	virtual ~MainWindow()
+	{
+		::SafeDelete(szWindowTitle);
 	}
 	bool Setup(HINSTANCE hInst)
 	{
@@ -57,7 +61,7 @@ public :
 
 		HWND hWnd = ::CreateWindowEx(0, 
 					szClassName, 
-					_T("Win32 Sample"),
+					((szWindowTitle)? szWindowTitle : _T("Win32 Sample")),
 					dwStyle, 
 					x, y,
 					width, height,
@@ -121,6 +125,15 @@ protected :
 	void SetWindowStyle(DWORD style)
 	{
 		dwStyle = style;
+	}
+	void SetWindowTitle(LPCTSTR szTitle)
+	{
+		::strAlloc(szWindowTitle, szTitle);
+	}
+	void SetWindowSize(const int& w, const int& h)
+	{
+		width = w;
+		height = h;
 	}
 
 protected :

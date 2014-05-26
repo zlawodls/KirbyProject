@@ -6,6 +6,7 @@ Image::Image()
 , clrTransparent(RGB(0,0,0))
 , bUseAlpha(false)
 , bUseTransparent(false)
+, BitmapSize(0, 0)
 {
 }
 Image::~Image()
@@ -27,6 +28,10 @@ bool Image::Load(LPCTSTR lpFileName)
 	BITMAP bm;
 	::GetObject(hBitmap, sizeof(bm), &bm);
 
+	Size tmp(bm.bmWidth, bm.bmHeight);
+
+	BitmapSize = tmp;
+
 	rcSrc = Rect(Point(0,0), Point(bm.bmWidth, bm.bmHeight));
 
 	return true;
@@ -39,6 +44,13 @@ bool Image::Load(LPCTSTR lpFileName, const Rect& rc)
 		return false;
 
 	rcSrc = rc;
+
+	BITMAP bm;
+	::GetObject(hBitmap, sizeof(bm), &bm);
+
+	Size tmp(bm.bmWidth, bm.bmHeight);
+
+	BitmapSize = tmp;
 
 	return true;
 }
@@ -105,6 +117,27 @@ void Image::SetTransparentColor(const COLORREF& clr)
 	bUseAlpha = false;
 	clrTransparent = clr;
 }
+void Image::SetDrawRectBitmap()
+{
+	rcDraw.right = BitmapSize.cx;
+	rcDraw.bottom = BitmapSize.cy;
+}
+void Image::SetDrawPoint(const LONG& x, const LONG& y)
+{
+	Rect tmp = rcDraw;
+
+	rcDraw.left = x;
+	rcDraw.right = rcDraw.left + tmp.width();
+	rcDraw.top = y;
+	rcDraw.bottom = rcDraw.top + tmp.height();
+}
+void Image::SetBlockPoint(const LONG& x, const LONG& y)
+{
+	rcDraw.left -= x;
+	rcDraw.right -= x;
+	rcDraw.top -= y;
+	rcDraw.bottom -= y;
+}
 Rect Image::GetDrawRect() const
 {
 	return rcDraw;
@@ -112,4 +145,12 @@ Rect Image::GetDrawRect() const
 Rect Image::GetSrcRect() const
 {
 	return rcSrc;
+}
+Size Image::GetBmSize() const
+{
+	return BitmapSize;
+}
+HBITMAP Image::GetBitmap() const
+{
+	return hBitmap;
 }

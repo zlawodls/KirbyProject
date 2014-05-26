@@ -3,16 +3,55 @@
 #include "../GameDev/GameDev.h"
 #include <list>
 
-class Kirby
+enum Zone_id
 {
-public :
+	LeftZone = 0,
+	RightZone,
+	UpZone,
+	DownZone,
+	ZoneMax,
+};
+enum Kirby_Size
+{
+	KirbyWidth = 60,
+	KitbyHeight = 58,
+
+};
+enum Kirby_state
+{
+	StdState = 0,
+	MoveState,
+
+};
+
+class Kirby : public singleton<Kirby>
+{
+	friend class singleton<Kirby>;
+
+private :
 	Kirby();
 	~Kirby();
-	void Load();
-	void Input();
-	void Draw();
-	void Update();
+public :
+	void Load(const Rect& rc);
+	void Input(DWORD);
+	void Draw(HDC hdc);
+	void Update(DWORD);
+
+	Point RetrunKirbyPos() const;
 
 private :
 	Point KirbyPos;
+	Point PlayerPos;
+	DWORD update_dt;
+
+	Image KirbyStd;
+	Animation KirbyStdEye;
+	Animation KirbyMove;
+
+	Rect ClientRect;
+	Rect Zone[ZoneMax];
+
+	BYTE state;
 };
+
+#define KirbyBase Kirby::getReference()

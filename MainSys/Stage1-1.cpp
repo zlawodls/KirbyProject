@@ -1,5 +1,10 @@
 #include "Stage1-1.h"
 
+Stage1_1::Stage1_1()
+	:Direction(true), MoveBlock(0, 0)
+{
+	PlayerPos = KirbyBase.RetrunKirbyPos();
+}
 Stage1_1::~Stage1_1()
 {
 	std::list<Image*>::iterator it;
@@ -9,17 +14,63 @@ Stage1_1::~Stage1_1()
 		it = Block1.erase(it);
 	}
 }
+void Stage1_1::Draw(HDC hdc)
+{
+	BackGround[0].SetDrawPoint(MoveMap.x, MoveMap.y);
+	BackGround[0].Draw(hdc);
 
+	if(MoveMap.x < 0)
+	{
+		BackGround[1].SetDrawPoint((BackGround[1].GetBmSize().cx * 3) + MoveMap.x, MoveMap.y);
+		BackGround[1].Draw(hdc);
+	}
+	else
+	{
+		BackGround[1].SetDrawPoint(-(BackGround[1].GetBmSize().cx * 3) + MoveMap.x, MoveMap.y);
+		BackGround[1].Draw(hdc);
+	}
+
+	std::list<Image*>::iterator it;
+	for(it = Block1.begin(); it != Block1.end(); it++)
+	{
+		Rect tmp;
+		if (::IntersectRect(&tmp, &ClientRect, &((*it)->GetDrawRect())))
+		{
+			(*it)->Draw(hdc);
+		}
+	}
+}
+void Stage1_1::Update(DWORD tick)
+{
+	if(-MoveMap.x > (BackGround[1].GetBmSize().cx * 3) || MoveMap.x > (BackGround[1].GetBmSize().cx * 3))
+		MoveMap.x = 0;
+
+	if(PlayerPos.x < 0)
+		MoveMap.x = 0;
+
+	std::list<Image*>::iterator it;
+	for(it = Block1.begin(); it != Block1.end(); it++)
+	{
+			(*it)->SetBlockPoint(MoveBlock.x, MoveBlock.y);
+	}
+
+}
 void Stage1_1::Load(HWND hWnd)
 {
+	// 백그라운드 로드
 	::GetClientRect(hWnd, &ClientRect);
 
-	BackGround_1.Load(_T("BackGrounds.bmp"));
-	BackGround_1.SetDrawRect(ClientRect);
+	for(int i = 0; i < 2; i++)
+	{
+		BackGround[i].Load(_T("BackGrounds.bmp"));
+		Rect tmpbm = ClientRect;
+		Size tmpSize = BackGround[i].GetBmSize();
+		tmpbm.right = tmpSize.cx*3;
+		tmpbm.top = tmpbm.bottom - (tmpSize.cy*3);
+		BackGround[i].SetDrawRect(tmpbm);
+	}
 
-	BackGround_2.Load(_T("BackGrounds.bmp"));
-	BackGround_1.SetDrawRect(ClientRect);
-
+	// 블록1 로드
 	Image* tmp = new Image;
 
 	Rect tmpRc;
@@ -34,22 +85,27 @@ void Stage1_1::Load(HWND hWnd)
 	tmp->SetDrawRect(tmpRc);
 	Block1.push_back(tmp);
 }
-void Stage1_1::Draw(HDC hdc)
+void Stage1_1::SetPlayerPos(const Point& pt)
 {
-	BackGround_1.Draw(hdc);
-	BackGround_2.Draw(hdc);
-	
-	std::list<Image*>::iterator it;
-	for(it = Block1.begin(); it != Block1.end(); it++)
+	if(PlayerPos.x < pt.x)
 	{
-		Rect tmp;
-		if (::IntersectRect(&tmp, &ClientRect, &((*it)->GetDrawRect())))
-		{
-			(*it)->Draw(hdc);
-		}
+		MoveBlock.x = pt.x - PlayerPos.x;
 	}
-}
-void Stage1_1::Update(DWORD)
-{
-	
+	else if(PlayerPos.x > pt.x)
+	{
+		MoveBlock.x = -(PlayerPos.x - pt.x);
+	}
+	else
+		MoveBlock.x = 0;
+
+	if(PlayerPos.x < pt.x && PlayerPos.x%4 == 1)
+	{
+		MoveMap.x -= 1;
+	}
+	else if(PlayerPos.x > pt.x && PlayerPos.x%4 == 1)
+	{
+		MoveMap.x += 1;
+	}
+
+	PlayerPos = pt;
 }
