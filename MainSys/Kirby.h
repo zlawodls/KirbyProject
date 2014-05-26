@@ -45,8 +45,13 @@ private :
 	DWORD update_dt;
 
 	Image KirbyStd;
+	Image KirbyStdBack;
 	Animation KirbyStdEye;
+	Animation KirbyStdEyeBack;
 	Animation KirbyMove;
+	Animation KirbyMoveBack;
+
+	bool BackPosition;
 
 	Rect ClientRect;
 	Rect Zone[ZoneMax];
