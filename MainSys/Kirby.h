@@ -7,8 +7,6 @@ enum Zone_id
 {
 	LeftZone = 0,
 	RightZone,
-	UpZone,
-	DownZone,
 	ZoneMax,
 };
 enum Kirby_Size
@@ -50,6 +48,9 @@ private :
 	Animation KirbyStdEyeBack;
 	Animation KirbyMove;
 	Animation KirbyMoveBack;
+
+	LONG MoveAcc;
+	int MoveAccCount;
 
 	bool BackPosition;
 

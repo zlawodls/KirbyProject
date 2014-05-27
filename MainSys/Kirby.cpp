@@ -1,8 +1,8 @@
 #include "Kirby.h"
 
 Kirby::Kirby()
-:KirbyPos(300, 200), PlayerPos(300, 200), update_dt(0),
-state(0), BackPosition(false)
+:KirbyPos(200, 200), PlayerPos(400, 200), update_dt(0),
+state(0), BackPosition(false), MoveAcc(0), MoveAccCount(0)
 {
 }
 Kirby::~Kirby()
@@ -49,35 +49,47 @@ void Kirby::Load(const Rect& rc)
 		Anitmp->SetDrawRect(tmp);
 		KirbyMoveBack.AddImage(Anitmp);
 	}
+	KirbyMove.SetUpdateDelay(70);
+	KirbyMoveBack.SetUpdateDelay(70);
 
 	for(int i = 0; i < 4; i++)
 	{
 		Zone[i] = ClientRect;
 	}
-	Zone[LeftZone].right = Zone[LeftZone].left + 300;
-	Zone[RightZone].left = Zone[RightZone].right - 300;
-	Zone[UpZone].bottom = Zone[UpZone].top + 200;
-	Zone[DownZone].top = Zone[DownZone].bottom - 200;
+	Zone[LeftZone].right = Zone[LeftZone].left + 400;
+	Zone[RightZone].left = Zone[RightZone].right - 400;
 }
 void Kirby::Input(DWORD tick)
 {
-	if(update_dt > 10)
+	if(update_dt > 20)
 	{
-		int count = update_dt / 10;
+		int count = update_dt / 20;
 
 		for(int i = 0; i < count; i++)
 		{
 			Rect tmp;
 			if(InputDevice[VK_RIGHT] && ::IntersectRect(&tmp, &Zone[RightZone], &KirbyStd.GetDrawRect()))
 			{
-				PlayerPos.x += 1;
+				if(BackPosition)
+					MoveAcc = 0;
+				MoveAcc += 1;
+				if(MoveAcc >= 4)
+					MoveAcc = 4;
+
+				PlayerPos.x += MoveAcc;
 				state = MoveState;
 				BackPosition = false;
 			}
 			else if(InputDevice[VK_LEFT] && ::IntersectRect(&tmp, &Zone[LeftZone], &KirbyStd.GetDrawRect())
 				    && !(PtInRect(&Zone[LeftZone], PlayerPos)))
 			{
-				PlayerPos.x -= 1;
+				if(!BackPosition)
+					MoveAcc = 0;
+				MoveAcc += 1;
+				if(MoveAcc >= 4)
+					MoveAcc = 4;
+
+				PlayerPos.x -= MoveAcc;
 				if(PlayerPos.x < 0)
 					PlayerPos.x = 0;
 				state = MoveState;
@@ -85,7 +97,13 @@ void Kirby::Input(DWORD tick)
 			}
 			else if(InputDevice[VK_LEFT])
 			{
-				KirbyPos.x -= 1;
+				if(!BackPosition)
+					MoveAcc = 0;
+				MoveAcc += 1;
+				if(MoveAcc >= 4)
+					MoveAcc = 4;
+
+				KirbyPos.x -= MoveAcc;
 				if(KirbyPos.x - KirbyWidth/2 < 0)
 					KirbyPos.x = KirbyWidth/2;
 				state = MoveState;
@@ -93,18 +111,62 @@ void Kirby::Input(DWORD tick)
 			}
 			else if(InputDevice[VK_RIGHT])
 			{
-				KirbyPos.x += 1;
+				if(BackPosition)
+					MoveAcc = 0;
+				MoveAcc += 1;
+				if(MoveAcc >= 4)
+					MoveAcc = 4;
+
+				KirbyPos.x += MoveAcc;
 				state = MoveState;
 				BackPosition = false;
 			}
-			else
+			else if(MoveAcc > 0 && state == MoveState)
+			{
+				if(MoveAccCount > 2)
+				{
+					if(!(::IntersectRect(&tmp, &Zone[LeftZone], &KirbyStd.GetDrawRect())))
+					{
+						if(BackPosition)
+						{
+							MoveAcc -= 1;
+							KirbyPos.x -= MoveAcc;
+							if(KirbyPos.x - KirbyWidth/2 < 0)
+								KirbyPos.x = KirbyWidth/2;
+						}
+						else
+						{
+							MoveAcc -= 1;
+							KirbyPos.x += MoveAcc;
+						}
+					}
+					else
+					{
+						if(BackPosition)
+						{
+							MoveAcc -= 1;
+							PlayerPos.x -= MoveAcc;
+							if(PlayerPos.x < 0)
+								PlayerPos.x = 0;
+						}
+						else
+						{
+							MoveAcc -= 1;
+							PlayerPos.x += MoveAcc;
+						}
+					}
+					MoveAccCount = 0;
+				}
+				MoveAccCount += 1;
+			}
+			else if(MoveAcc == 0)
 			{
 				state = StdState;
 				KirbyMove.SetPlaying(true);
 			}
 		}
 
-		update_dt = update_dt % 10;
+		update_dt = update_dt % 20;
 	}
 	
 	update_dt += tick;
