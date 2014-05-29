@@ -22,7 +22,6 @@ public :
 	void SetPlayerPos(const Point& pt);
 
 private :
-	Image BackGround[2];
 	std::list<Image*> Block1;
 	Rect ClientRect;
 	Point MoveMap;

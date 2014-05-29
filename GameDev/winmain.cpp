@@ -8,28 +8,5 @@ INT WINAPI _tWinMain(HINSTANCE hInst, HINSTANCE, LPTSTR, INT)
 
 	app.Setup(hInst);
 
-	MSG msg;
-
-	DWORD dt = 1;
-	DWORD st = ::GetTickCount();
-
-	while (true)
-	{
-		if (::PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-		{
-			::TranslateMessage(&msg);
-			::DispatchMessage(&msg);
+   return app.Run();
 		}
-		if (msg.message == WM_QUIT)
-			break;
-
-		app.Input(dt);
-		app.Update(dt);
-		app.Draw(dt);
-
-		dt = ::GetTickCount() - st;
-		st = ::GetTickCount();
-	}
-
-	return msg.wParam;
-}

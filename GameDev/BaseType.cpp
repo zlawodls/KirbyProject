@@ -36,6 +36,11 @@ Point Point::operator - (const Point& o)
 {
 	return Point(x - o.x, y - o.y);
 }
+float Point::operator ^ (const Point& o)
+{
+	Point diff = *this - o;
+	return float(sqrt(float(diff.x*diff.x + diff.y*diff.y)));
+}
 
 ///////////////////////////////////////////////////////////////
 // Size
@@ -90,6 +95,13 @@ Rect::Rect(const Point& ct, const Size& cs)
 	right = left + cs.cx;
 	bottom = top + cs.cy;
 }
+Rect::Rect(const Point& lt, const LONG& w, const LONG& h)
+{
+   left = lt.x;
+   top = lt.y;
+   right = left + w;
+   bottom = top + h;
+}
 Point Rect::lefttop() const
 {
 	return Point(left, top);
@@ -109,6 +121,10 @@ LONG Rect::height() const
 Point Rect::center() const
 {
 	return Point((left+right)/2, (top+bottom)/2);
+}
+float Rect::radius() const
+{
+   return sqrt(float(width()*width() + height()*height()))/2;
 }
 Rect Rect::ToScreen(HWND hWnd)
 {
@@ -139,6 +155,14 @@ Rect Rect::operator << (const Size& diff) const
 Rect Rect::operator >> (const Size& diff) const
 {
 	return Rect(left + diff.cx, top + diff.cy, right + diff.cx, bottom + diff.cy);
+}
+Rect Rect::operator + (const Size& diff) const
+{
+	return Rect(left - diff.cx, top - diff.cy, right + diff.cx, bottom + diff.cy);
+}
+Rect Rect::operator - (const Size& diff) const
+{
+	return Rect(left + diff.cx, top + diff.cy, right - diff.cx, bottom - diff.cy);
 }
 
 ///////////////////////////////////////////////////////////////

@@ -22,6 +22,7 @@ private :
 public :
 	void Update(DWORD tick);
 	bool OnClick(const int& vkey);
+   void Processed(const int& vkey);
 	bool IsPressed(const int& vkey);
 	bool operator [] (const int& vkey);
 	Point pos() const;

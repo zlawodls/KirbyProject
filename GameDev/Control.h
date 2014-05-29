@@ -16,8 +16,12 @@ public :
 	virtual void Draw(HDC hdc);
 
 	id_type id() const;
+
+   bool IsVisible() const;
+   void ShowControl(bool bShow = true);
 private :
 	id_type cid;
+   bool bVisible;
 
 	static id_type gen_id;
 

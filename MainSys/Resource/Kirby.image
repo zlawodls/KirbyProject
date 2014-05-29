@@ -1,0 +1,8 @@
+// id 파일명 그려질부분 transparent사용여부 [값1] alpha사용여부 [값2]
+// [값1] : 투명처리할 색
+// [값2] : 알파값
+// []로 감싸진 부분은 사용여부에 따라 있을수도 있고, 없을수도 있다.
+KirbyStd Resource\\image\\Kirby_base.bmp 6,8,26,27 1 cfb0ff 0
+KirbyStdBack Resource\\image\\Kirby_base_back.bmp 734,8,754,27 1 cfb0ff 0
+KirbyBreak Resource\\image\\Kirby_base.bmp 188,80,212,101 1 cfb0ff 0
+KirbyBreakBack Resource\\image\\Kirby_base_back.bmp 548,80,572,101 1 cfb0ff 0

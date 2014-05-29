@@ -194,6 +194,26 @@
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
+			<Filter
+				Name="Animation"
+				>
+				<File
+					RelativePath=".\Resource\Kirby.animation"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Image"
+				>
+				<File
+					RelativePath=".\Resource\Kirby.image"
+					>
+				</File>
+				<File
+					RelativePath=".\Resource\Stage1-1.image"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Stage1"
@@ -216,6 +236,26 @@
 			</File>
 			<File
 				RelativePath=".\Kirby.h"
+				>
+			</File>
+			<File
+				RelativePath=".\KirbyState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\KirbyState.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Effect"
+			>
+			<File
+				RelativePath=".\Effect.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Effect.h"
 				>
 			</File>
 		</Filter>

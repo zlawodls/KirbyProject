@@ -23,6 +23,11 @@ bool InputProcessor::OnClick(const int& vkey)
 {
 	return clickbits[vkey];
 }
+void InputProcessor::Processed(const int& vkey)
+{
+   clickbits[vkey] = false;
+   cKey[vkey] = 0x00;
+}
 bool InputProcessor::IsPressed(const int& vkey)
 {
 	return ((cKey[vkey] & 0x80) == 0x80);

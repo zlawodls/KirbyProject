@@ -1,65 +1,138 @@
-#include "Animation.h"
+﻿#include "Animation.h"
+
 
 Animation::Animation()
-: update_dt(0), update_delay(100)
-, bDrawImage(true), Reset_dt(0)
-, index(0)
-{}
+   : update_dt(0), delay(500)
+   , bLoop(false), index(0)
+   , bDoNotDraw(false), Reset_dt(0)
+{
+}
 Animation::~Animation()
 {
-	std::list<Image*>::iterator it;
-	for (it = imgList.begin(); it != imgList.end(); it++)
-	{
-		delete (*it);
-	}
+   for (depotiter it = shotlist.begin();
+      it != shotlist.end();)
+   {
+      // 등록된 이미지를 메모리 해제한다.
+      delete (*it);
+
+      // 노드도 삭제한다.
+      it = shotlist.erase(it);
+   }
 }
 
+Animation* Animation::clone()
+{
+   Animation* pClone = new Animation(*this);
+   return pClone;
+}
+
+void Animation::reset()
+{
+   bDoNotDraw = false;
+   index = 0;
+}
+void Animation::SetImage(depot& imagelist)
+{
+   shotlist = imagelist;
+}
 void Animation::AddImage(Image* pImage)
 {
-	imgList.push_back(pImage);
-}
+   shotlist.push_back(pImage);
 
+   rcImage = pImage->getRect();
+}
+void Animation::SetLoop(bool _loop/*=true*/)
+{
+   bLoop = _loop;
+}
+void Animation::SetDelay(DWORD _delay/*=500*/)
+{
+   delay = _delay;
+}
+void Animation::SetPosition(const Point& pt)
+{
+   ptDraw = pt;
+}
+void Animation::SetRect(const Rect& rc)
+{
+   rcDest = rc;
+}
+Rect Animation::getRect(void) const
+{
+   if (shotlist.empty()) return Rect();
+
+   return (*shotlist.begin())->getRect();
+}
 void Animation::Update(DWORD tick)
 {
-	if (!bDrawImage) return;
+   if (bDoNotDraw) return;
 
-	if (update_dt > update_delay)
-	{
-		index++;
-		if (index == imgList.size())
-			bDrawImage = false;
+   if (update_dt >= delay)
+   {
+      index++;
+      if (shotlist.size() == index)
+      {
+         if (bLoop)
+         {
+            index = 0;
+         }
+         else
+         {
+            bDoNotDraw = true;
+         }
+      }
 
-		update_dt -= update_delay;
-	}
+      update_dt -= delay;
+   }
 
-	update_dt += tick;
+   update_dt += tick;
+}
+void Animation::Draw(HDC hdc, const Rect& rc)
+{
+   if (bDoNotDraw) return;
+
+   shotlist[index]->Move(rc);
+   shotlist[index]->Draw(hdc);
 }
 void Animation::Draw(HDC hdc)
 {
-	if (!bDrawImage) return;
+   if (bDoNotDraw) return;
 
-	std::list<Image*>::iterator it = imgList.begin();
-	std::advance(it, index);
-
-	(*it)->Draw(hdc);
+   if (rcDest.width() == 0)
+   {
+      rcImage = Rect(ptDraw, Size(rcImage.width(), rcImage.height()));
+   }
+   else
+   {
+      rcImage = rcDest;
+   }
+   shotlist[index]->Move(rcImage);
+   shotlist[index]->Draw(hdc);
 }
-void Animation::SetDrawRect(const Rect& rc)
+void Animation::SetTransparent(COLORREF clr)
 {
-	std::list<Image*>::iterator it;
-	for (it = imgList.begin(); it != imgList.end(); it++)
-	{
-		(*it)->SetDrawRect(rc);
-	}
+   for (depotiter it = shotlist.begin();
+      it != shotlist.end();
+      it++)
+   {
+      (*it)->SetTransparent(clr);
+   }
 }
-void Animation::SetUpdateDelay(DWORD delay)
+bool Animation::IsPlaying() const
 {
-	update_delay = delay;
+	return !bDoNotDraw;
 }
-void Animation::SetPlaying(const bool& set)
+// 알파블랜딩으로 그리기 위한 설정.
+void Animation::SetAlpha(BYTE alpha)
 {
-	index = 0;
-	bDrawImage = set;
+   for (depotiter it = shotlist.begin();
+      it != shotlist.end();
+      it++)
+   {
+      (*it)->SetAlpha(alpha);
+   }
 }
+// 개인적으로 만든 함수
 void Animation::ResetAni(DWORD tick, DWORD delay)
 {
 	if(Reset_dt > delay)
@@ -67,18 +140,10 @@ void Animation::ResetAni(DWORD tick, DWORD delay)
 		int count = Reset_dt / delay;
 		for(int i = 0; i < count; i++)
 		{
-			SetPlaying(true);
+			index = 0;
+			bDoNotDraw = false;
 		}
 		Reset_dt = Reset_dt%delay;
 	}
 	Reset_dt += tick;
-}
-void Animation::CheckIndex()
-{
-	if (index == imgList.size())
-		SetPlaying(true);
-}
-bool Animation::IsPlaying() const
-{
-	return bDrawImage;
 }

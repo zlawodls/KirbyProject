@@ -1,6 +1,8 @@
 #pragma once
 
 #include "../GameDev/GameDev.h"
+#include "KirbyState.h"
+#include "Effect.h"
 #include <list>
 
 enum Zone_id
@@ -8,18 +10,6 @@ enum Zone_id
 	LeftZone = 0,
 	RightZone,
 	ZoneMax,
-};
-enum Kirby_Size
-{
-	KirbyWidth = 60,
-	KitbyHeight = 58,
-
-};
-enum Kirby_state
-{
-	StdState = 0,
-	MoveState,
-
 };
 
 class Kirby : public singleton<Kirby>
@@ -42,12 +32,9 @@ private :
 	Point PlayerPos;
 	DWORD update_dt;
 
-	Image KirbyStd;
-	Image KirbyStdBack;
-	Animation KirbyStdEye;
-	Animation KirbyStdEyeBack;
-	Animation KirbyMove;
-	Animation KirbyMoveBack;
+	KirbyStateCon KirbyState;
+
+	Rect KirbyRect;
 
 	LONG MoveAcc;
 	int MoveAccCount;

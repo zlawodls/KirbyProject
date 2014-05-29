@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include <windows.h>
+#include <tchar.h>
 
 template<typename T>
 class singleton
@@ -51,3 +52,5 @@ CharType* strAlloc(CharType* & dest, const CharType* const src)
 
 	return dest;
 }
+
+void ErrorMessageBox(const DWORD& dwError);

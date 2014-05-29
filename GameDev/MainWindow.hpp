@@ -2,9 +2,11 @@
 
 #include <windows.h>
 #include <tchar.h>
+#include <list>
 #include <map>
 #include "Callable.hpp"
 #include "DoubleBuffer.h"
+#include "Control.h"
 
 template<typename T>
 class MainWindow
@@ -13,11 +15,12 @@ class MainWindow
 	typedef Callable<LRESULT,T,LRESULT(T::*)(HWND,UINT,WPARAM,LPARAM)> Action;
 	typedef typename Action::action_type action_type;
 	typedef std::map<UINT,Action> EvtMapType;
+   typedef std::list<Control*> ControlListType;
 
 public :
 	MainWindow()
 		: szClassName(_T("MainWindowClass"))
-		, width(400), height(400)
+		, m_nWidth(400), m_nHeight(400)
 		, dwStyle(WS_OVERLAPPEDWINDOW)
 		, szWindowTitle(NULL)
 		, hMainWnd(NULL)
@@ -27,6 +30,8 @@ public :
 	virtual ~MainWindow()
 	{
 		::SafeDelete(szWindowTitle);
+
+      //eventmap.clear();
 	}
 	bool Setup(HINSTANCE hInst)
 	{
@@ -56,15 +61,15 @@ public :
 		int cx = ::GetSystemMetrics(SM_CXSCREEN);
 		int cy = ::GetSystemMetrics(SM_CYSCREEN);
 
-		int x = (cx - width)/2;
-		int y = (cy - height)/2;
+		int x = (cx - m_nWidth)/2;
+		int y = (cy - m_nHeight)/2;
 
 		HWND hWnd = ::CreateWindowEx(0, 
 					szClassName, 
 					((szWindowTitle)? szWindowTitle : _T("Win32 Sample")),
 					dwStyle, 
 					x, y,
-					width, height,
+					m_nWidth, m_nHeight,
 					NULL,
 					NULL,
 					hInst,
@@ -97,13 +102,19 @@ public :
 				::TranslateMessage(&msg);
 				::DispatchMessage(&msg);
 			}
+			else
+			{
+				// ::DispatchMessage 로 인해 윈도우 내부적으로 쓰레드를 이용한 처리가 이루어지면서
+				// OnDestroy 에서 제거되고 있는 데이터에 접근이 가능하게 되어
+				// Crash 가 발생하는 경우가 종종 있어서 윈도우 메세지를 처리하지
+				// 않을 때만 게임 작업을 하도록 수정함.
+				Input(dt);
+				Update(dt);
+				Draw(dt);
+			}
+
 			if (msg.message == WM_QUIT)
 				break;
-
-
-			Input(dt);
-			Update(dt);
-			Draw(dt);
 
 			dt = ::GetTickCount() - st;
 			st = ::GetTickCount();
@@ -132,8 +143,16 @@ protected :
 	}
 	void SetWindowSize(const int& w, const int& h)
 	{
-		width = w;
-		height = h;
+		m_nWidth = w;
+		m_nHeight = h;
+	}
+   void ChangeClientRect()
+   {
+		backbuffer.Detach();
+		backbuffer.Attach(hMainWnd);
+		backbuffer << RGB(255,255,255);
+      
+      ::GetClientRect(hMainWnd, &rcClient);
 	}
 
 protected :
@@ -214,8 +233,6 @@ protected :
 private :
 	LPCTSTR szClassName;
 	LPTSTR szWindowTitle;
-	int width;
-	int height;
 	DWORD dwStyle;
 	EvtMapType eventmap;
 
@@ -224,4 +241,8 @@ protected :
 	HDC hMainDC;
 	Rect rcClient;
 	DoubleBuffer backbuffer;
+	int m_nWidth;
+	int m_nHeight;
+
+   ControlListType ControlList;
 };

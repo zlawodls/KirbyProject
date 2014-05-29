@@ -1,0 +1,48 @@
+// id count 반복여부 delay
+//		id : 애니메이션 id
+//		count : 애니메이션에 사용될 이미지 갯수
+// 경로 사이즈 [투명사용여부 투명처리할색깔] [알파사용여부 알파값]
+KirbyMove 10 1 70
+Resource\\image\\Kirby_base.bmp 5,58,29,77 1 cfb0ff 0
+Resource\\image\\Kirby_base.bmp 28,58,52,77 1 cfb0ff 0
+Resource\\image\\Kirby_base.bmp 51,58,75,77 1 cfb0ff 0
+Resource\\image\\Kirby_base.bmp 74,58,98,77 1 cfb0ff 0
+Resource\\image\\Kirby_base.bmp 97,58,121,77 1 cfb0ff 0
+Resource\\image\\Kirby_base.bmp 120,58,144,77 1 cfb0ff 0
+Resource\\image\\Kirby_base.bmp 143,58,167,77 1 cfb0ff 0
+Resource\\image\\Kirby_base.bmp 166,58,190,77 1 cfb0ff 0
+Resource\\image\\Kirby_base.bmp 189,58,213,77 1 cfb0ff 0
+Resource\\image\\Kirby_base.bmp 212,58,236,77 1 cfb0ff 0
+KirbyMoveBack 10 1 70
+Resource\\image\\Kirby_base_back.bmp 731,58,755,77 1 cfb0ff 0
+Resource\\image\\Kirby_base_back.bmp 708,58,732,77 1 cfb0ff 0
+Resource\\image\\Kirby_base_back.bmp 685,58,709,77 1 cfb0ff 0
+Resource\\image\\Kirby_base_back.bmp 662,58,686,77 1 cfb0ff 0
+Resource\\image\\Kirby_base_back.bmp 639,58,663,77 1 cfb0ff 0
+Resource\\image\\Kirby_base_back.bmp 616,58,640,77 1 cfb0ff 0
+Resource\\image\\Kirby_base_back.bmp 593,58,617,77 1 cfb0ff 0
+Resource\\image\\Kirby_base_back.bmp 570,58,594,77 1 cfb0ff 0
+Resource\\image\\Kirby_base_back.bmp 547,58,571,77 1 cfb0ff 0
+Resource\\image\\Kirby_base_back.bmp 524,58,548,77 1 cfb0ff 0
+KirbyRun 8 1 60
+Resource\\image\\Kirby_base.bmp 5,80,27,101 1 cfb0ff 0
+Resource\\image\\Kirby_base.bmp 27,80,49,101 1 cfb0ff 0
+Resource\\image\\Kirby_base.bmp 49,80,71,101 1 cfb0ff 0
+Resource\\image\\Kirby_base.bmp 71,80,93,101 1 cfb0ff 0
+Resource\\image\\Kirby_base.bmp 94,80,120,101 1 cfb0ff 0
+Resource\\image\\Kirby_base.bmp 123,80,145,101 1 cfb0ff 0
+Resource\\image\\Kirby_base.bmp 145,80,167,101 1 cfb0ff 0
+Resource\\image\\Kirby_base.bmp 167,80,189,101 1 cfb0ff 0
+KirbyRunBack 8 1 60
+Resource\\image\\Kirby_base_back.bmp 733,80,755,101 1 cfb0ff 0
+Resource\\image\\Kirby_base_back.bmp 711,80,733,101 1 cfb0ff 0
+Resource\\image\\Kirby_base_back.bmp 689,80,711,101 1 cfb0ff 0
+Resource\\image\\Kirby_base_back.bmp 667,80,689,101 1 cfb0ff 0
+Resource\\image\\Kirby_base_back.bmp 640,80,666,101 1 cfb0ff 0
+Resource\\image\\Kirby_base_back.bmp 615,80,637,101 1 cfb0ff 0
+Resource\\image\\Kirby_base_back.bmp 593,80,615,101 1 cfb0ff 0
+Resource\\image\\Kirby_base_back.bmp 571,80,593,101 1 cfb0ff 0
+KirbyStdEye 1 0 150
+Resource\\image\\Kirby_base.bmp 30,8,50,27 1 cfb0ff 0
+KirbyStdEyeBack 1 0 150
+Resource\\image\\Kirby_base_back.bmp 710,8,730,27 1 cfb0ff 0

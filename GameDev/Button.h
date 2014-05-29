@@ -4,7 +4,10 @@
 #include "InputDevice.h"
 #include "Utility.hpp"
 
-#define WM_BUTTON_CLICK		(WM_USER + 1)
+enum WM_USER_ID
+{
+	WM_BUTTON_CLICK = WM_USER + 1,
+};
 
 class Button : public Control
 {
@@ -29,7 +32,7 @@ public :
 	void SetDrawRect(const Rect& rc);
 	void SetStateColor(const Color& normal, const Color& hover, const Color& click);
 
-private :
+protected :
 	Rect rcDraw;
 
 	LPTSTR szText;

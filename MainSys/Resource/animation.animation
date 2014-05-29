@@ -1,0 +1,19 @@
+// id count 반복여부 delay
+//		id : 애니메이션 id
+//		count : 애니메이션에 사용될 이미지 갯수
+// 경로 사이즈 [투명사용여부 투명처리할색깔] [알파사용여부 알파값]
+cursor 5 1 100
+Resource\\image\\cursor.bmp 2,2,42,42 1 0000ff 0
+Resource\\image\\cursor.bmp 46,2,86,42 1 0000ff 0
+Resource\\image\\cursor.bmp 90,2,130,42 1 0000ff 0
+Resource\\image\\cursor.bmp 134,2,174,42 1 0000ff 0
+Resource\\image\\cursor.bmp 178,2,218,42 1 0000ff 0
+fire 8 1 300
+Resource\\image\\fire.bmp 0,0,140,330 1 000000 0
+Resource\\image\\fire.bmp 140,0,280,330 1 000000 0
+Resource\\image\\fire.bmp 280,0,420,330 1 000000 0
+Resource\\image\\fire.bmp 420,0,560,330 1 000000 0
+Resource\\image\\fire.bmp 140,0,280,330 1 000000 0
+Resource\\image\\fire.bmp 280,0,420,330 1 000000 0
+Resource\\image\\fire.bmp 420,0,560,330 1 000000 0
+Resource\\image\\fire.bmp 140,0,280,330 1 000000 0

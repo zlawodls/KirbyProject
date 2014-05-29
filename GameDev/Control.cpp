@@ -3,7 +3,7 @@
 Control::id_type Control::gen_id = 0;
 
 Control::Control()
-: hOwner(NULL), cid(gen_id++)
+: hOwner(NULL), cid(gen_id++), bVisible(false)
 {}
 Control::~Control()
 {}
@@ -26,4 +26,11 @@ Control::id_type Control::id() const
 {
 	return cid;
 }
-
+bool Control::IsVisible() const
+{
+   return bVisible;
+}
+void Control::ShowControl(bool bShow/*=true*/)
+{
+   bVisible = bShow;
+}
