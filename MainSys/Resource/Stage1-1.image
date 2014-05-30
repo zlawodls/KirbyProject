@@ -2,6 +2,6 @@
 // [값1] : 투명처리할 색
 // [값2] : 알파값
 // []로 감싸진 부분은 사용여부에 따라 있을수도 있고, 없을수도 있다.
-BackGround Resource\\image\\BackGrounds.bmp 0,0,336,216 0 0
-BackGround2 Resource\\image\\BackGrounds.bmp 0,0,336,216 0 0
+BackGround Resource\\image\\BackGrounds.bmp 0,0,1008,648 0 0
+BackGround2 Resource\\image\\BackGrounds.bmp 0,0,1008,648 0 0
 Block1 Resource\\image\\Block_1.bmp 0,0,255,127 1 000000 0

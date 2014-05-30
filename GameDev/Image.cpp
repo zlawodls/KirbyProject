@@ -231,7 +231,8 @@ void Image::Draw(HDC hdc)
          hBitmapDC,							// 이미지 DC
          rcSrc.left, rcSrc.top,	
 		 rcSrc.width(), rcSrc.height(),		// 이미지 부분 위치
-         SRCCOPY);							// 이미지를 그리는 방법.
+         SRCCOPY);						// 이미지를 그리는 방법.
+
    }
 
    Select(hBitmapDC, hOldBitmap);
@@ -242,6 +243,7 @@ void Image::Draw(HDC hdc)
    {
       ::DeleteObject(hRotateBitmap);
    }
+
 }
 // 투명처리를 하기 위한 설정..
 void Image::SetTransparent(COLORREF clr)
@@ -352,12 +354,10 @@ Size Image::GetBmSize() const
 {
 	return BitmapSize;
 }
-void Image::SetDrawPoint(const LONG& x, const LONG& y)
+void Image::SetDrawPoint(const LONG& x)
 {
 	Rect tmp = rcDest;
 
 	rcDest.left = x;
 	rcDest.right = rcDest.left + tmp.width();
-	rcDest.top = y;
-	rcDest.bottom = rcDest.top + tmp.height();
 }

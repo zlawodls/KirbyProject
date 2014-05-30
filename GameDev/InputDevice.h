@@ -21,6 +21,7 @@ private :
 
 public :
 	void Update(DWORD tick);
+	bool AnyKey() const;
 	bool OnClick(const int& vkey);
    void Processed(const int& vkey);
 	bool IsPressed(const int& vkey);

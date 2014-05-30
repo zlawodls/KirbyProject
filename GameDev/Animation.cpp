@@ -69,18 +69,22 @@ void Animation::Update(DWORD tick)
 
    if (update_dt >= delay)
    {
-      index++;
-      if (shotlist.size() == index)
-      {
-         if (bLoop)
-         {
-            index = 0;
-         }
-         else
-         {
-            bDoNotDraw = true;
-         }
-      }
+	  int count = update_dt / delay;
+	  for(int i = 0; i < count; i++)
+	  {
+		  index++;
+		  if (shotlist.size() == index)
+		  {
+			  if (bLoop)
+			  {
+				  index = 0;
+			  }
+			  else
+			  {
+				  bDoNotDraw = true;
+			  }
+		  }
+	  }
 
       update_dt -= delay;
    }

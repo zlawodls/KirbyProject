@@ -5,9 +5,6 @@ void KirbyStateCon::Load(const Rect& rc, const Point& KirbyPos)
 	srand((unsigned)time(NULL));
 	ClientRect = rc;
 
-	ImgLoader(_T("Resource//Kirby.image"));
-	AniLoader(_T("Resource//Kirby.animation"));
-
 	Rect tmp;
 	tmp.left = KirbyPos.x - KirbyWidth/2;
 	tmp.top = KirbyPos.y - KirbyHeight/2;

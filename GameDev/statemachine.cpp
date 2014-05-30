@@ -4,6 +4,10 @@ state::state()
 {}
 state::~state()
 {}
+void state::SetMachine(statemachine* _pMachine)
+{
+	pMachine = _pMachine;
+}
 
 statemachine::statemachine()
    : _current(NULL)
@@ -25,7 +29,8 @@ state* statemachine::transition(const key_type& key)
 
    next->Enter();
 
-   _current->Leave();
+   if (_current)
+	_current->Leave();
 
    state* prev = _current;
 
@@ -38,6 +43,7 @@ bool statemachine::AddEntry(const key_type& key, state* s)
    StateDepotType::iterator it = StateDepot.find(key);
    if (it == StateDepot.end())
    {
+	   s->SetMachine(this);
       StateDepot.insert(std::make_pair(key, s));
 
       return true;

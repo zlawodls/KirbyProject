@@ -27,6 +27,8 @@ void Kirby::Load(const Rect& rc)
 }
 void Kirby::Input(DWORD tick)
 {
+	DWORD timeF = ::GetTickCount();
+
 	if(update_dt > 20)
 	{
 		int count = update_dt / 20;
@@ -232,9 +234,18 @@ void Kirby::Input(DWORD tick)
 	}
 
 	update_dt += tick;
+
+	DWORD timeE = ::GetTickCount() - timeF;
+
+	std::wostringstream oss;
+	oss << _T("KirbyInputTime : ") << timeE << _T("\n");
+
+	::OutputDebugString(oss.str().c_str());
 }
 void Kirby::Draw(HDC hdc)
 {
+	DWORD timeF = ::GetTickCount();
+
 	KirbyState.Draw(hdc, state, BackPosition);
 
 	::MoveToEx(hdc, KirbyRect.left, KirbyRect.top, NULL);
@@ -242,9 +253,18 @@ void Kirby::Draw(HDC hdc)
 	::LineTo(hdc, KirbyRect.right, KirbyRect.bottom);
 	::LineTo(hdc, KirbyRect.right, KirbyRect.top);
 	::LineTo(hdc, KirbyRect.left, KirbyRect.top);
+
+	DWORD timeE = ::GetTickCount() - timeF;
+
+	std::wostringstream oss;
+	oss << _T("KirbyDrawTime : ") << timeE << _T("\n");
+
+	::OutputDebugString(oss.str().c_str());
 }
 void Kirby::Update(DWORD tick)
 {
+	DWORD timeF = ::GetTickCount();
+
 	Rect tmp;
 	tmp.left = KirbyPos.x - KirbyWidth/2;
 	tmp.top = KirbyPos.y - KirbyHeight/2;
@@ -257,6 +277,13 @@ void Kirby::Update(DWORD tick)
 	KirbyRect.bottom = KirbyRect.top + KirbyHeight;
 
 	KirbyState.Update(tick, tmp);
+
+	DWORD timeE = ::GetTickCount() - timeF;
+
+	std::wostringstream oss;
+	oss << _T("KirbyUpdateTime : ") << timeE << _T("\n");
+
+	::OutputDebugString(oss.str().c_str());
 }
 
 Point Kirby::RetrunKirbyPos() const

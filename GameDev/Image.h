@@ -2,6 +2,7 @@
 
 #include <windows.h>
 #include <fstream>
+#include <sstream>
 #ifndef _USE_MATH_DEFINES
 #define _USE_MATH_DEFINES
 #endif // _USE_MATH_DEFINES
@@ -59,7 +60,7 @@ public :
 
 	void SetBlockPoint(const LONG& x, const LONG& y);
 
-	void SetDrawPoint(const LONG& x, const LONG& y);
+	void SetDrawPoint(const LONG& x);
 
 	Rect GetDrawRect() const;
 

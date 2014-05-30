@@ -19,6 +19,18 @@ void InputProcessor::Update(DWORD tick)
 	// 클릭 상태를 체크한다.
 	_check();
 }
+bool InputProcessor::AnyKey() const
+{
+	for (int i = 0; i < count; i++)
+	{
+		if ((cKey[i] & 0x80) == 0x80)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
 bool InputProcessor::OnClick(const int& vkey)
 {
 	return clickbits[vkey];

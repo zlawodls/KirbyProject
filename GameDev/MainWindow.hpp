@@ -4,6 +4,7 @@
 #include <tchar.h>
 #include <list>
 #include <map>
+#include <sstream>
 #include "Callable.hpp"
 #include "DoubleBuffer.h"
 #include "Control.h"
@@ -102,22 +103,25 @@ public :
 				::TranslateMessage(&msg);
 				::DispatchMessage(&msg);
 			}
-			else
-			{
-				// ::DispatchMessage 로 인해 윈도우 내부적으로 쓰레드를 이용한 처리가 이루어지면서
-				// OnDestroy 에서 제거되고 있는 데이터에 접근이 가능하게 되어
-				// Crash 가 발생하는 경우가 종종 있어서 윈도우 메세지를 처리하지
-				// 않을 때만 게임 작업을 하도록 수정함.
-				Input(dt);
-				Update(dt);
-				Draw(dt);
-			}
 
 			if (msg.message == WM_QUIT)
 				break;
 
+			Input(dt);
+			DWORD timeF = ::GetTickCount();
+			Update(dt);
+			Draw(dt);
+
 			dt = ::GetTickCount() - st;
 			st = ::GetTickCount();
+
+			DWORD timeE = ::GetTickCount() - timeF;
+
+			std::wostringstream oss;
+
+			oss << _T("SystemTime : ") << timeE << _T("\n");	
+
+			::OutputDebugString(oss.str().c_str());
 		}
 
 		return msg.wParam;

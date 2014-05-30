@@ -11,6 +11,9 @@ Mainsys::Mainsys()
 }
 void Mainsys::Enter()
 {
+	ImgLoader(_T("Resource//Kirby.image"));
+	AniLoader(_T("Resource//Kirby.animation"));
+
 	Stage1_1.Load(hMainWnd);
 	KirbyBase.Load(rcClient);
 }
