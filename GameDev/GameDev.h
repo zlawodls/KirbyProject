@@ -30,3 +30,5 @@
 #include "LoadAnimationResource.h"
 #include "LoadImageResource.h"
 #include "LoadSoundResource.h"
+
+#include "GameGlobal.h"

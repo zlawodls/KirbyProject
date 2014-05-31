@@ -222,6 +222,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\GameGlobal.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\GameGlobal.h"
+					>
+				</File>
+				<File
 					RelativePath=".\InputDevice.cpp"
 					>
 				</File>

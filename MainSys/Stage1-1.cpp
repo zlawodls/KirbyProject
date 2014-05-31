@@ -7,12 +7,6 @@ Stage1_1::Stage1_1()
 }
 Stage1_1::~Stage1_1()
 {
-	std::list<Image*>::iterator it;
-	for(it = Block1.begin(); it != Block1.end();)
-	{
-		delete (*it);
-		it = Block1.erase(it);
-	}
 }
 void Stage1_1::Draw(HDC hdc)
 {
@@ -31,15 +25,7 @@ void Stage1_1::Draw(HDC hdc)
 		BackGround[1].Draw(hdc);
 	}
 
-	std::list<Image*>::iterator it;
-	for(it = Block1.begin(); it != Block1.end(); it++)
-	{
-		Rect tmp;
-		if (::IntersectRect(&tmp, &ClientRect, &((*it)->GetDrawRect())))
-		{
-			(*it)->Draw(hdc);
-		}
-	}
+	BlockDepot.Draw(hdc);
 }
 void Stage1_1::Update(DWORD tick)
 {
@@ -49,12 +35,7 @@ void Stage1_1::Update(DWORD tick)
 	if(PlayerPos.x < 0)
 		MoveMap.x = 0;
 
-	std::list<Image*>::iterator it;
-	for(it = Block1.begin(); it != Block1.end(); it++)
-	{
-			(*it)->SetBlockPoint(MoveBlock.x, MoveBlock.y);
-	}
-
+	BlockDepot.Update(MoveBlock.x, MoveBlock.y);
 }
 void Stage1_1::Load(HWND hWnd)
 {
@@ -72,23 +53,42 @@ void Stage1_1::Load(HWND hWnd)
 	}
 
 	// 블록1 로드
-	for(int i = 0; i < 10; i++)
-	{
-		Image* tmp = new Image;
 
-		Rect tmpRc;
+	Block* tmp = new Block;
 
-		tmpRc = ClientRect;
-		tmpRc.top = tmpRc.height() - Block1_y_size + 100;
-		tmpRc.bottom = tmpRc.top + Block1_y_size;
-		tmpRc.right = Block1_x_size * (i+1);
-		tmpRc.left = ClientRect.left + (Block1_x_size * i);
+	Rect tmpRc;
 
-		tmp->Load(_T("Resource//image//Block_1.bmp"));
-		tmp->SetTransparent(RGB(0,0,0));
-		tmp->SetRect(tmpRc);
-		Block1.push_back(tmp);
-	}
+	tmpRc = ClientRect;
+	tmpRc.top = tmpRc.height() - Block1_y_size + 100;
+	tmpRc.bottom = tmpRc.top + Block1_y_size;
+	tmpRc.right = Block1_x_size;
+
+	tmp->Load(_T("Resource//image//Block_1.bmp"));
+	tmp->SetTransparent(RGB(0,0,0));
+	tmp->SetRect(tmpRc);
+	tmp->SetBBoxRect(tmpRc);
+	tmp->SetShowBox();
+	tmp->BoxGap(30);
+
+	BlockDepot.Push(tmp);
+
+
+	tmp = new Block;
+
+	tmpRc = ClientRect;
+	tmpRc.top = tmpRc.height() - Block1_y_size + 50;
+	tmpRc.bottom = tmpRc.top + Block1_y_size;
+	tmpRc.left = tmpRc.right + 200;
+	tmpRc.right = tmpRc.left + Block1_x_size;
+
+	tmp->Load(_T("Resource//image//Block_1.bmp"));
+	tmp->SetTransparent(RGB(0,0,0));
+	tmp->SetRect(tmpRc);
+	tmp->SetBBoxRect(tmpRc);
+	tmp->SetShowBox();
+	tmp->BoxGap(30);
+	BlockDepot.Push(tmp);
+
 }
 void Stage1_1::SetPlayerPos(const Point& pt)
 {

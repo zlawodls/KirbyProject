@@ -2,6 +2,7 @@
 
 #include "../GameDev/GameDev.h"
 #include "Kirby.h"
+#include "BlockManager.h"
 #include <list>
 #include <sstream>
 
@@ -24,7 +25,6 @@ public :
 
 private :
 	Image BackGround[2];
-	std::list<Image*> Block1;
 	Rect ClientRect;
 	Point MoveMap;
 	Point MoveBlock;

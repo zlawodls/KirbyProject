@@ -3,6 +3,7 @@
 #include "../GameDev/GameDev.h"
 #include "KirbyState.h"
 #include "Effect.h"
+#include "BlockManager.h"
 #include <list>
 
 enum Zone_id

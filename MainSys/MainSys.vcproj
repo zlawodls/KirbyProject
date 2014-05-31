@@ -206,6 +206,26 @@
 				RelativePath=".\Stage1-1.h"
 				>
 			</File>
+			<Filter
+				Name="Block"
+				>
+				<File
+					RelativePath=".\Block.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Block.h"
+					>
+				</File>
+				<File
+					RelativePath=".\BlockManager.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\BlockManager.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="character"

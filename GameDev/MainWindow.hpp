@@ -4,10 +4,10 @@
 #include <tchar.h>
 #include <list>
 #include <map>
-#include <sstream>
 #include "Callable.hpp"
 #include "DoubleBuffer.h"
 #include "Control.h"
+#include "GameGlobal.h"
 
 template<typename T>
 class MainWindow
@@ -36,6 +36,8 @@ public :
 	}
 	bool Setup(HINSTANCE hInst)
 	{
+		GameGlobal.hInstance = hInst;
+
 		WNDCLASSEX wcex;
 
 		wcex.cbSize = sizeof(WNDCLASSEX);
@@ -108,20 +110,12 @@ public :
 				break;
 
 			Input(dt);
-			DWORD timeF = ::GetTickCount();
 			Update(dt);
 			Draw(dt);
+			backbuffer.Draw();
 
 			dt = ::GetTickCount() - st;
 			st = ::GetTickCount();
-
-			DWORD timeE = ::GetTickCount() - timeF;
-
-			std::wostringstream oss;
-
-			oss << _T("SystemTime : ") << timeE << _T("\n");	
-
-			::OutputDebugString(oss.str().c_str());
 		}
 
 		return msg.wParam;
@@ -156,7 +150,9 @@ protected :
 		backbuffer.Attach(hMainWnd);
 		backbuffer << RGB(255,255,255);
       
-      ::GetClientRect(hMainWnd, &rcClient);
+		::GetClientRect(hMainWnd, &rcClient);
+
+		GameGlobal.rcClient = rcClient;
 	}
 
 protected :
@@ -178,12 +174,16 @@ protected :
 	}
 	LRESULT OnCreate(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
+		GameGlobal.hMainWnd = hWnd;
+
 		backbuffer.Attach(hWnd);
 		backbuffer << RGB(255,255,255);
 
 		hMainWnd = hWnd;
 		hMainDC = ::GetDC(hWnd);
 		::GetClientRect(hWnd, &rcClient);
+
+		GameGlobal.rcClient = rcClient;
 
 		Enter();
 
