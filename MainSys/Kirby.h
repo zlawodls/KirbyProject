@@ -6,16 +6,11 @@
 #include "BlockManager.h"
 #include <list>
 
-enum Zone_id
-{
-	LeftZone = 0,
-	RightZone,
-	ZoneMax,
-};
-
-class Kirby : public singleton<Kirby>
+class Kirby : public singleton<Kirby>, public Object, public statemachine
 {
 	friend class singleton<Kirby>;
+	friend class Object;
+	friend class statemachine;
 
 private :
 	Kirby();
@@ -25,16 +20,17 @@ public :
 	void Input(DWORD);
 	void Draw(HDC hdc);
 	void Update(DWORD);
+	void Setposition(const Point& ppt, const Point& kpt, const bool& back);
 
 	Point RetrunKirbyPos() const;
+
+private :
+	void init();
 
 private :
 	Point KirbyPos;
 	Point PlayerPos;
 	DWORD update_dt;
-
-	KirbyStateCon KirbyState;
-
 	Rect KirbyRect;
 
 	LONG MoveAcc;
@@ -43,9 +39,10 @@ private :
 	bool BackPosition;
 
 	Rect ClientRect;
-	Rect Zone[ZoneMax];
 
 	BYTE state;
+
+	BoundaryBox* BBox;
 };
 
 #define KirbyBase Kirby::getReference()

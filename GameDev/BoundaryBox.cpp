@@ -83,7 +83,11 @@ SquareBox::~SquareBox()
 
 void SquareBox::Draw(HDC hdc)
 {
-   ::Rectangle(hdc, rcBox.left, rcBox.top, rcBox.right, rcBox.bottom);
+	::MoveToEx(hdc, rcBox.left, rcBox.top, NULL);
+	::LineTo(hdc, rcBox.left, rcBox.bottom);
+	::LineTo(hdc, rcBox.right, rcBox.bottom);
+	::LineTo(hdc, rcBox.right, rcBox.top);
+	::LineTo(hdc, rcBox.left, rcBox.top);
 }
 bool SquareBox::IsCollide(BoundaryBox* other)
 {

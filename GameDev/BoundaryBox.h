@@ -38,6 +38,7 @@ public :
 
    void SetPosition(const Point& pt);
    void SetRadius(const LONG& r);
+
 private :
    Point center;
    LONG radius;

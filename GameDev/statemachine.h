@@ -20,7 +20,7 @@ public :
    virtual void Draw(HDC) = 0;
    virtual void Leave() = 0;
 
-   virtual void SetPosition(const Point& ) = 0;
+   virtual void SetPosition(const Point& , const Point& , const bool& ) = 0;
 
    void SetMachine(statemachine* _pMachine);
 
