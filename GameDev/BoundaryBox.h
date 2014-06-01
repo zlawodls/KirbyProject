@@ -20,6 +20,7 @@ public :
    virtual void Draw(HDC) = 0;
 
    virtual bool IsCollide(BoundaryBox* other) = 0;
+   virtual BYTE BoxIsCollide(BoundaryBox* other) = 0;
    virtual void SetPosition(const Point& pt) = 0;
 
    int type() const;
@@ -52,6 +53,7 @@ public :
 
    virtual void Draw(HDC);
    virtual bool IsCollide(BoundaryBox* other);
+   virtual BYTE BoxIsCollide(BoundaryBox* other);
 
    void SetPosition(const Point& pt);
    void SetRect(const Rect& rc);

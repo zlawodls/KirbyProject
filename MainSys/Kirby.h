@@ -33,14 +33,15 @@ private :
 	DWORD update_dt;
 	Rect KirbyRect;
 
+	BYTE KirbyState;
+	BYTE Wallcount;
+
 	LONG MoveAcc;
 	int MoveAccCount;
 
 	bool BackPosition;
 
 	Rect ClientRect;
-
-	BYTE state;
 
 	BoundaryBox* BBox;
 };

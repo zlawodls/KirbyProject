@@ -392,3 +392,11 @@ void Block::BoxGap(const LONG& lt)
 {
 	Gap = lt;
 }
+BoundaryBox* Block::getBBox()
+{
+	return BBox;
+}
+Rect Block::GetBBoxRect() const
+{
+	return dynamic_cast<SquareBox*>(BBox)->getBox();
+}

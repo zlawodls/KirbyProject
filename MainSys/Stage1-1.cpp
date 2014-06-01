@@ -78,7 +78,7 @@ void Stage1_1::Load(HWND hWnd)
 	tmpRc = ClientRect;
 	tmpRc.top = tmpRc.height() - Block1_y_size + 50;
 	tmpRc.bottom = tmpRc.top + Block1_y_size;
-	tmpRc.left = tmpRc.right + 200;
+	tmpRc.left = tmpRc.right - 200;
 	tmpRc.right = tmpRc.left + Block1_x_size;
 
 	tmp->Load(_T("Resource//image//Block_1.bmp"));

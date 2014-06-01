@@ -68,6 +68,10 @@ public :
 
 	Size GetBmSize() const;
 
+	BoundaryBox* getBBox();
+
+	Rect GetBBoxRect() const;
+
 	// 이미지 핸들 자체를 필요로 하는 경우에 호출됨.
 	operator HBITMAP ();
 

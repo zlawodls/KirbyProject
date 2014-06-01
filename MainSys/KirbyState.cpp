@@ -5,6 +5,7 @@
 /////////////////////////////////////////////////////////////
 KirbyIdle::KirbyIdle()
 : update_dt(0), MoveAcc(0), update_delay(20)
+, Stand(false), Wall(0)
 {
 	for(int i = 0; i < ZoneMax; i++)
 	{
@@ -51,6 +52,14 @@ void KirbyIdle::Input(DWORD tick)
 }
 void KirbyIdle::Update(DWORD tick)
 {
+	if (pMachine)
+		dynamic_cast<Kirby*>(pMachine)->Setposition(PlayerPos, KirbyPos, BackPosition);
+
+	if(!Stand)
+	{
+		KirbyPos.y += 1;
+	}
+
 	ImgDepot["KirbyStd"]->SetRect(KirbyRect);
 	AniDepot["KirbyStdEye"]->SetRect(KirbyRect);
 	ImgDepot["KirbyStdBack"]->SetRect(KirbyRect);
@@ -94,6 +103,11 @@ void KirbyIdle::SetPosition(const Point& ppt, const Point& kpt, const bool& back
 	KirbyRect.right = KirbyWidth + KirbyRect.left;
 	KirbyRect.bottom = KirbyHeight + KirbyRect.top;
 }
+void KirbyIdle::GetState(const bool& st, const BYTE& wl)
+{
+	Stand = st;
+	Wall = wl;
+}
 
 
 /////////////////////////////////////////////////////////////
@@ -102,7 +116,7 @@ void KirbyIdle::SetPosition(const Point& ppt, const Point& kpt, const bool& back
 KirbyMove::KirbyMove()
 : update_dt(0), MoveAcc(0), update_delay(20)
 , KeyPush(true), update_dt2(0), update_delay2(60)
-, RightKey(false)
+, RightKey(false), Stand(false), Wall(0)
 {
 	for(int i = 0; i < ZoneMax; i++)
 	{
@@ -178,8 +192,8 @@ void KirbyMove::Update(DWORD tick)
 
 					if(PlayerPos.x < 390)
 						PlayerPos.x = 390;
-
-					PlayerPos.x += MoveAcc;
+					if(!(Wall == 2))
+						PlayerPos.x += MoveAcc;
 				}
 				else if(BackPosition && ::IntersectRect(&tmp, &Zone[LeftZone], &KirbyRect) && !(PtInRect(&Zone[LeftZone], PlayerPos)))
 				{
@@ -188,7 +202,8 @@ void KirbyMove::Update(DWORD tick)
 					if(MoveAcc >= 4)
 						MoveAcc = 4;
 
-					PlayerPos.x -= MoveAcc;
+					if(!(Wall == 1))
+						PlayerPos.x -= MoveAcc;
 
 					if(PlayerPos.x < 0)
 						PlayerPos.x = 0;
@@ -200,7 +215,8 @@ void KirbyMove::Update(DWORD tick)
 					if(MoveAcc >= 4)
 						MoveAcc = 4;
 
-					KirbyPos.x += MoveAcc;
+					if(!(Wall == 2))
+						KirbyPos.x += MoveAcc;
 
 					if(KirbyPos.x - KirbyWidth/2 < 0)
 						KirbyPos.x = KirbyWidth/2;
@@ -212,7 +228,8 @@ void KirbyMove::Update(DWORD tick)
 					if(MoveAcc >= 4)
 						MoveAcc = 4;
 
-					KirbyPos.x -= MoveAcc;
+					if(!(Wall == 1))
+						KirbyPos.x -= MoveAcc;
 
 					if(KirbyPos.x - KirbyWidth/2 < 0)
 						KirbyPos.x = KirbyWidth/2;
@@ -236,14 +253,16 @@ void KirbyMove::Update(DWORD tick)
 					if(BackPosition)
 					{
 						MoveAcc -= 1;
-						KirbyPos.x -= MoveAcc;
+						if(!(Wall == 1))
+							KirbyPos.x -= MoveAcc;
 						if(KirbyPos.x - KirbyWidth/2 < 0)
 							KirbyPos.x = KirbyWidth/2;
 					}
 					else
 					{
 						MoveAcc -= 1;
-						KirbyPos.x += MoveAcc;
+						if(!(Wall == 2))
+							KirbyPos.x += MoveAcc;
 					}
 				}
 				else
@@ -251,14 +270,16 @@ void KirbyMove::Update(DWORD tick)
 					if(BackPosition)
 					{
 						MoveAcc -= 1;
-						PlayerPos.x -= MoveAcc;
+						if(!(Wall == 1))
+							PlayerPos.x -= MoveAcc;
 						if(PlayerPos.x < 0)
 							PlayerPos.x = 0;
 					}
 					else
 					{
 						MoveAcc -= 1;
-						PlayerPos.x += MoveAcc;
+						if(!(Wall == 2))
+							PlayerPos.x += MoveAcc;
 					}
 				}
 			}
@@ -268,6 +289,11 @@ void KirbyMove::Update(DWORD tick)
 	}
 	if (pMachine)
 		dynamic_cast<Kirby*>(pMachine)->Setposition(PlayerPos, KirbyPos, BackPosition);
+
+	if(!Stand)
+	{
+		KirbyPos.y += 1;
+	}
 
 	// 애니메이션 업데이트
 	AniDepot["KirbyMove"]->SetRect(Rect(KirbyRect.left, KirbyRect.top, KirbyRect.right+5, KirbyRect.bottom));
@@ -302,13 +328,18 @@ void KirbyMove::SetPosition(const Point& ppt, const Point& kpt, const bool& back
 	KirbyRect.right = KirbyWidth + KirbyRect.left;
 	KirbyRect.bottom = KirbyHeight + KirbyRect.top;
 }
+void KirbyMove::GetState(const bool& st, const BYTE& wl)
+{
+	Stand = st;
+	Wall = wl;
+}
 
 /////////////////////////////////////////////////////////////
 // 달리는 동작
 /////////////////////////////////////////////////////////////
 KirbyRun::KirbyRun()
 : Break(false), update_dt(0), update_delay(20), MoveAcc(4)
-, KeyPush(true), update_dt2(0), update_delay2(60)
+, KeyPush(true), update_dt2(0), update_delay2(60), Stand(false), Wall(0)
 {
 	for(int i = 0; i < ZoneMax; i++)
 	{
@@ -382,10 +413,11 @@ void KirbyRun::Update(DWORD tick)
 					if(MoveAcc >= 8)
 						MoveAcc = 8;
 
-					if(PlayerPos.x < 390)
-						PlayerPos.x = 390;
+					if(PlayerPos.x < 375)
+						PlayerPos.x = 375;
 
-					PlayerPos.x += MoveAcc;
+					if(!(Wall == 2))
+						PlayerPos.x += MoveAcc;
 				}
 				else if(BackPosition && ::IntersectRect(&tmp, &Zone[LeftZone], &KirbyRect) && !(PtInRect(&Zone[LeftZone], PlayerPos)))
 				{
@@ -394,7 +426,8 @@ void KirbyRun::Update(DWORD tick)
 					if(MoveAcc >= 8)
 						MoveAcc = 8;
 
-					PlayerPos.x -= MoveAcc;
+					if(!(Wall == 1))
+						PlayerPos.x -= MoveAcc;
 
 					if(PlayerPos.x < 0)
 						PlayerPos.x = 0;
@@ -406,7 +439,8 @@ void KirbyRun::Update(DWORD tick)
 					if(MoveAcc >= 8)
 						MoveAcc = 8;
 
-					KirbyPos.x += MoveAcc;
+					if(!(Wall == 2))
+						KirbyPos.x += MoveAcc;
 
 					if(KirbyPos.x - KirbyWidth/2 < 0)
 						KirbyPos.x = KirbyWidth/2;
@@ -418,7 +452,8 @@ void KirbyRun::Update(DWORD tick)
 					if(MoveAcc >= 8)
 						MoveAcc = 8;
 
-					KirbyPos.x -= MoveAcc;
+					if(!(Wall == 1))
+						KirbyPos.x -= MoveAcc;
 
 					if(KirbyPos.x - KirbyWidth/2 < 0)
 						KirbyPos.x = KirbyWidth/2;
@@ -428,7 +463,7 @@ void KirbyRun::Update(DWORD tick)
 		}
 		update_dt += tick;
 	}
-	else if(MoveAcc > 0)
+	else if(MoveAcc > 0 || MoveAcc < 0)
 	{
 		update_dt = 0;
 		if(update_dt2 > update_delay2)
@@ -436,35 +471,92 @@ void KirbyRun::Update(DWORD tick)
 			int count = update_dt2 / update_delay2;
 			for(int i = 0; i < count; i++)
 			{
-				Rect tmp;
-				if(!(::IntersectRect(&tmp, &Zone[RightZone], &KirbyRect)))
+				if(MoveAcc > 0)
 				{
-					if(BackPosition)
+					Rect tmp;
+					if(!(::IntersectRect(&tmp, &Zone[RightZone], &KirbyRect)))
 					{
-						MoveAcc -= 1;
-						KirbyPos.x -= MoveAcc;
-						if(KirbyPos.x - KirbyWidth/2 < 0)
-							KirbyPos.x = KirbyWidth/2;
+						if(BackPosition)
+						{
+							MoveAcc -= 1;
+
+							if(!(Wall == 1 || Wall == 2))
+								KirbyPos.x -= MoveAcc;
+							if(KirbyPos.x - KirbyWidth/2 < 0)
+								KirbyPos.x = KirbyWidth/2;
+						}
+						else
+						{
+							MoveAcc -= 1;
+
+							if(!(Wall == 1 || Wall == 2))
+								KirbyPos.x += MoveAcc;
+						}
 					}
 					else
 					{
-						MoveAcc -= 1;
-						KirbyPos.x += MoveAcc;
+						if(BackPosition)
+						{
+							MoveAcc -= 1;
+
+							if(!(Wall == 1 || Wall == 2))
+								PlayerPos.x -= MoveAcc;
+							if(PlayerPos.x < 0)
+								PlayerPos.x = 0;
+						}
+						else
+						{
+							MoveAcc -= 1;
+
+							if(!(Wall == 1 || Wall == 2))
+								PlayerPos.x += MoveAcc;
+						}
 					}
 				}
-				else
+				else if(MoveAcc < 0)
 				{
-					if(BackPosition)
+					Rect tmp;
+					if(!(::IntersectRect(&tmp, &Zone[RightZone], &KirbyRect)))
 					{
-						MoveAcc -= 1;
-						PlayerPos.x -= MoveAcc;
-						if(PlayerPos.x < 0)
-							PlayerPos.x = 0;
+						if(BackPosition)
+						{
+							MoveAcc += 1;
+
+							if(!(Wall == 1 || Wall == 2))
+								KirbyPos.x -= MoveAcc;
+							if(KirbyPos.x - KirbyWidth/2 < 0)
+								KirbyPos.x = KirbyWidth/2;
+						}
+						else
+						{
+							MoveAcc += 1;
+
+							if(!(Wall == 1 || Wall == 2))
+								KirbyPos.x += MoveAcc;
+							if(KirbyPos.x - KirbyWidth/2 < 0)
+								KirbyPos.x = KirbyWidth/2;
+						}
 					}
 					else
 					{
-						MoveAcc -= 1;
-						PlayerPos.x += MoveAcc;
+						if(BackPosition)
+						{
+							MoveAcc += 1;
+
+							if(!(Wall == 1 || Wall == 2))
+								PlayerPos.x -= MoveAcc;
+							if(PlayerPos.x < 0)
+								PlayerPos.x = 0;
+						}
+						else
+						{
+							MoveAcc += 1;
+
+							if(!(Wall == 1 || Wall == 2))
+								PlayerPos.x += MoveAcc;
+							if(PlayerPos.x < 375)
+								PlayerPos.x = 375;
+						}
 					}
 				}
 			}
@@ -474,6 +566,11 @@ void KirbyRun::Update(DWORD tick)
 	}
 	if (pMachine)
 		dynamic_cast<Kirby*>(pMachine)->Setposition(PlayerPos, KirbyPos, BackPosition);
+
+	if(!Stand)
+	{
+		KirbyPos.y += 1;
+	}
 
 	// 애니메이션 업데이트
 	ImgDepot["KirbyBreak"]->SetRect(Rect(KirbyRect.left, KirbyRect.top, KirbyRect.right+5, KirbyRect.bottom));
@@ -526,4 +623,9 @@ void KirbyRun::SetPosition(const Point& ppt, const Point& kpt, const bool& back)
 	KirbyRect.top = KirbyPos.y - KirbyHeight/2;
 	KirbyRect.right = KirbyWidth + KirbyRect.left;
 	KirbyRect.bottom = KirbyHeight + KirbyRect.top;
+}
+void KirbyRun::GetState(const bool& st, const BYTE& wl)
+{
+	Stand = st;
+	Wall = wl;
 }

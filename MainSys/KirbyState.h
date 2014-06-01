@@ -20,9 +20,9 @@ enum Kirby_Size
 enum Kirby_state
 {
 	StdState = 0,
-	MoveState,
-	RunState,
-	BreakState,
+	LeftWall,
+	RightWall,
+	TopWall,
 };
 
 class KirbyIdle : public state
@@ -36,6 +36,7 @@ public :
 	virtual void Update(DWORD);
 	virtual void Draw(HDC);
 	virtual void Leave();
+	void GetState(const bool& st, const BYTE& wl);
 	void SetPosition(const Point& kpt, const Point& ppt, const bool& back);
 
 private :
@@ -45,6 +46,9 @@ private :
 	Point KirbyPos;
 	Point PlayerPos;
 	Rect KirbyRect;
+
+	bool Stand;
+	BYTE Wall;
 
 	LONG MoveAcc;
 	Rect Zone[ZoneMax];
@@ -61,6 +65,7 @@ public :
 	virtual void Update(DWORD);
 	virtual void Draw(HDC);
 	virtual void Leave();
+	void GetState(const bool& st, const BYTE& wl);
 	void SetPosition(const Point& kpt, const Point& ppt, const bool& back);
 
 private :
@@ -74,6 +79,10 @@ private :
 	Rect KirbyRect;
 	LONG MoveAcc;
 	Rect Zone[ZoneMax];
+
+	bool Stand;
+	BYTE Wall;
+
 	bool BackPosition;
 	bool KeyPush;
 	bool RightKey;
@@ -89,6 +98,7 @@ public :
 	virtual void Update(DWORD);
 	virtual void Draw(HDC);
 	virtual void Leave();
+	void GetState(const bool& st, const BYTE& wl);
 	void SetPosition(const Point& kpt, const Point& ppt, const bool& back);
 
 private :
@@ -96,6 +106,9 @@ private :
 	DWORD update_delay;
 	DWORD update_dt2;
 	DWORD update_delay2;
+
+	bool Stand;
+	BYTE Wall;
 
 	Point KirbyPos;
 	Point PlayerPos;

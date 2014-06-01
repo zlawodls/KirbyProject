@@ -89,24 +89,47 @@ void SquareBox::Draw(HDC hdc)
 	::LineTo(hdc, rcBox.right, rcBox.top);
 	::LineTo(hdc, rcBox.left, rcBox.top);
 }
-bool SquareBox::IsCollide(BoundaryBox* other)
+BYTE SquareBox::BoxIsCollide(BoundaryBox* other)
 {
-   if (other == NULL) return false;
+   if (other == NULL) return 10;
 
    if (other->type() == BBOX_SQUARE)
    {
       Rect oBox = dynamic_cast<SquareBox*>(other)->getBox();
-      return !(rcBox.left > oBox.right ||
+      /*return !(rcBox.left > oBox.right ||
                rcBox.right < oBox.left ||
                rcBox.top > oBox.bottom ||
-               rcBox.bottom < oBox.top);
+               rcBox.bottom < oBox.top);*/
+	  Rect tmp;
+	  if(IntersectRect(&tmp, &rcBox, &oBox))
+	  {
+		  if(rcBox.left < oBox.right && rcBox.right > oBox.right)
+		  {
+			  return 1;
+		  }
+		  else if(rcBox.right > oBox.left && rcBox.left < oBox.left)
+		  {
+			  return 2;
+		  } 
+		  else if(rcBox.bottom > oBox.top)
+		  {
+			  return 0;
+		  }
+		  else if(rcBox.top < oBox.bottom)
+		  {
+			  return 3;
+		  }
+	  }
+	  else
+		  return 4;
    }
    else if (other->type() == BBOX_CIRCLE)
    {
-      return other->IsCollide(this);
+      /*return other->IsCollide(this);*/
+	   return 0;
    }
 
-   return false;
+   return 4;
 }
 
 Rect SquareBox::getBox() const
@@ -120,4 +143,8 @@ void SquareBox::SetPosition(const Point& pt)
 void SquareBox::SetRect(const Rect& rc)
 {
    rcBox = rc;
+}
+bool SquareBox::IsCollide(BoundaryBox* other)
+{
+	return true;
 }
