@@ -89,7 +89,7 @@ void SquareBox::Draw(HDC hdc)
 	::LineTo(hdc, rcBox.right, rcBox.top);
 	::LineTo(hdc, rcBox.left, rcBox.top);
 }
-BYTE SquareBox::BoxIsCollide(BoundaryBox* other)
+BYTE SquareBox::BoxIsCollide(BoundaryBox* other, const bool& back)
 {
    if (other == NULL) return 10;
 
@@ -103,15 +103,15 @@ BYTE SquareBox::BoxIsCollide(BoundaryBox* other)
 	  Rect tmp;
 	  if(IntersectRect(&tmp, &rcBox, &oBox))
 	  {
-		  if(rcBox.left < oBox.right && rcBox.right > oBox.right)
+		  if(rcBox.left < oBox.right && rcBox.right > oBox.right && back)
 		  {
 			  return 1;
 		  }
-		  else if(rcBox.right > oBox.left && rcBox.left < oBox.left)
+		  else if(rcBox.right > oBox.left && rcBox.left < oBox.left && !back)
 		  {
 			  return 2;
 		  } 
-		  else if(rcBox.bottom > oBox.top)
+		  else if(rcBox.bottom > oBox.top && rcBox.top < oBox.top)
 		  {
 			  return 0;
 		  }
