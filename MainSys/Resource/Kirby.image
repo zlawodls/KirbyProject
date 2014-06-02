@@ -6,5 +6,3 @@ KirbyStd Resource\\image\\Kirby_base.bmp 6,8,26,27 1 cfb0ff 0
 KirbyStdBack Resource\\image\\Kirby_base_back.bmp 734,8,754,27 1 cfb0ff 0
 KirbyBreak Resource\\image\\Kirby_base.bmp 188,80,212,101 1 cfb0ff 0
 KirbyBreakBack Resource\\image\\Kirby_base_back.bmp 548,80,572,101 1 cfb0ff 0
-KirbyJumpStart Resource\\image\\Kirby_base.bmp 6,104,27,125 1 cfb0ff 0
-KirbyJumpStartBack Resource\\image\\Kirby_base_back.bmp 733,104,754,125 1 cfb0ff 0

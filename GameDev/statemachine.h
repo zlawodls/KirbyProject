@@ -19,8 +19,7 @@ public :
    virtual void Update(DWORD) = 0;
    virtual void Draw(HDC) = 0;
    virtual void Leave() = 0;
-   virtual void GetState(const BYTE&) = 0;
-   virtual void GetStand(const bool&) = 0;
+   virtual void GetState(const bool& , const BYTE& ) = 0;
 
    virtual void SetPosition(const Point& , const Point& , const bool& ) = 0;
 

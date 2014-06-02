@@ -1,9 +1,9 @@
 #include "Kirby.h"
 
 Kirby::Kirby()
-:KirbyPos(200, 0), PlayerPos(375, 0), update_dt(0),
+:KirbyPos(200, 200), PlayerPos(375, 200), update_dt(0),
 BackPosition(false), MoveAcc(0), MoveAccCount(0)
-, KirbyState(4), Wallcount(0)
+, KirbyState(0), Wallcount(0)
 {
 	SquareBox* pBox = new SquareBox;
 
@@ -58,12 +58,16 @@ void Kirby::Update(DWORD tick)
 	KirbyRect.right = KirbyRect.left + KirbyWidth;
 	KirbyRect.bottom = KirbyRect.top + KirbyHeight;
 
+	if (_current)
+		_current->Update(tick);
+
 	Point tmp;
 	tmp = KirbyPos;
 	tmp.x = tmp.x - KirbyWidth/2;
 	tmp.y = tmp.y - KirbyHeight/2;
 
-	int CollideCount = 0;
+	if (BBox)
+		dynamic_cast<SquareBox*>(BBox)->SetRect(KirbyRect);
 
 	std::list<Block*> bList = BlockDepot.getList();
 	std::list<Block*>::iterator it;
@@ -72,59 +76,37 @@ void Kirby::Update(DWORD tick)
 		Rect tmp;
 		if(IntersectRect(&tmp, &KirbyRect, &(*it)->GetBBoxRect()))
 		{
-			BYTE tmpstate = BBox->BoxIsCollide((*it)->getBBox(), BackPosition);
+			BYTE tmpstate = BBox->BoxIsCollide((*it)->getBBox());
 
-			CollideCount++;
 			if(tmpstate == 1)
 			{
-				_current->GetState(1);
+				_current->GetState(true, 1);
 				KirbyState = tmpstate;
 			}
 			else if(tmpstate == 2)
 			{
-				_current->GetState(2);
+				_current->GetState(true, 2);
 				KirbyState = tmpstate;
 			}
 			else if(tmpstate == 3)
 			{
-				_current->GetState(3);
+				_current->GetState(true, 3);
 				KirbyState = tmpstate;
 			}
 			else if(tmpstate == 0)
 			{
-				_current->GetStand(true);
-				_current->GetState(0);
+				_current->GetState(true, 0);
 				KirbyState = tmpstate;
-			}
-
-			if(CollideCount >= 2)
-			{
-				break;
 			}
 		}
 	}
-	if(CollideCount == 0)
-	{
-		_current->GetStand(false);
-		_current->GetState(0);
-		KirbyState = 4;
-	}
-
-	if (_current)
-		_current->Update(tick);
-
-	if (BBox)
-		dynamic_cast<SquareBox*>(BBox)->SetRect(KirbyRect);
 
 	DWORD timeE = ::GetTickCount() - timeF;
 
 	std::wostringstream oss;
-	std::wostringstream sss;
-	oss << _T("KirbyRect : ") << KirbyRect.bottom << _T("\n");
-	sss << _T("KirbyState : ") << KirbyState << _T("\n");
+	oss << _T("KirbyState : ") << KirbyState << _T("\n");
 
 	::OutputDebugString(oss.str().c_str());
-	::OutputDebugString(sss.str().c_str());
 }
 
 Point Kirby::RetrunKirbyPos() const
@@ -149,23 +131,14 @@ void Kirby::init()
 	static KirbyIdle idle;
 	static KirbyMove move;
 	static KirbyRun run;
-	static KirbyJump jump;
-	static KirbyLanding landing;
-	static KirbyFloat flo;
 
 	idle.SetPosition(PlayerPos, KirbyPos, BackPosition);
 	move.SetPosition(PlayerPos, KirbyPos, BackPosition);
 	run.SetPosition(PlayerPos, KirbyPos, BackPosition);
-	jump.SetPosition(PlayerPos, KirbyPos, BackPosition);
-	landing.SetPosition(PlayerPos, KirbyPos, BackPosition);
-	flo.SetPosition(PlayerPos, KirbyPos, BackPosition);
 
 	AddEntry(_T("Idle"), &idle);
 	AddEntry(_T("Move"), &move);
 	AddEntry(_T("Run"), &run);
-	AddEntry(_T("Jump"), &jump);
-	AddEntry(_T("Landing"), &landing);
-	AddEntry(_T("Float"), &flo);
 
-	transition(_T("Landing"));
+	transition(_T("Idle"));
 }

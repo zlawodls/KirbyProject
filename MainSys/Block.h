@@ -62,7 +62,7 @@ public :
 
 	void SetShowBox();
 
-	void BoxGap(const LONG& ht, const LONG& lt=0, const LONG& rt=0);
+	void BoxGap(const LONG& lt);
 
 	Rect GetDrawRect() const;
 
@@ -89,8 +89,6 @@ private :
 	Rect rcSrc;
 
 	LONG Gap;
-	LONG GapL;
-	LONG GapR;
 
 	Size BitmapSize;
 

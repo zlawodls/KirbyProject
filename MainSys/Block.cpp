@@ -280,8 +280,6 @@ void Block::SetBBoxRect(const Rect& rc)
 	Rect tmp;
 	tmp = rcDest;
 	tmp.top = tmp.top + Gap;
-	tmp.left = tmp.left + GapL;
-	tmp.right = tmp.right - GapR;
 
 	dynamic_cast<SquareBox*>(BBox)->SetRect(tmp);
 }
@@ -363,8 +361,6 @@ void Block::SetBlockPoint(const LONG& x, const LONG& y)
 	Rect tmp;
 	tmp = rcDest;
 	tmp.top = tmp.top + Gap;
-	tmp.left = tmp.left + GapL;
-	tmp.right = tmp.right - GapR;
 	dynamic_cast<SquareBox*>(BBox)->SetRect(tmp);
 }
 Rect Block::GetDrawRect() const
@@ -392,11 +388,9 @@ void Block::SetShowBox()
 {
 	ShowBox = true;
 }
-void Block::BoxGap(const LONG& ht, const LONG& lt, const LONG& rt)
+void Block::BoxGap(const LONG& lt)
 {
-	Gap = ht;
-	GapL = lt;
-	GapR = rt;
+	Gap = lt;
 }
 BoundaryBox* Block::getBBox()
 {

@@ -4,8 +4,6 @@
 #include "Kirby.h"
 #include <stdlib.h>
 #include <time.h>
-#include <sstream>
-#include <fstream>
 
 enum Zone_id
 {
@@ -38,8 +36,7 @@ public :
 	virtual void Update(DWORD);
 	virtual void Draw(HDC);
 	virtual void Leave();
-	void GetState(const BYTE& wl);
-	void GetStand(const bool&);
+	void GetState(const bool& st, const BYTE& wl);
 	void SetPosition(const Point& kpt, const Point& ppt, const bool& back);
 
 private :
@@ -68,8 +65,7 @@ public :
 	virtual void Update(DWORD);
 	virtual void Draw(HDC);
 	virtual void Leave();
-	void GetState(const BYTE& wl);
-	void GetStand(const bool&);
+	void GetState(const bool& st, const BYTE& wl);
 	void SetPosition(const Point& kpt, const Point& ppt, const bool& back);
 
 private :
@@ -102,8 +98,7 @@ public :
 	virtual void Update(DWORD);
 	virtual void Draw(HDC);
 	virtual void Leave();
-	void GetState(const BYTE& wl);
-	void GetStand(const bool&);
+	void GetState(const bool& st, const BYTE& wl);
 	void SetPosition(const Point& kpt, const Point& ppt, const bool& back);
 
 private :
@@ -124,133 +119,3 @@ private :
 	bool BackPosition;
 	bool KeyPush;
 };
-class KirbyJump : public state
-{
-public :
-	KirbyJump();
-	virtual ~KirbyJump();
-
-	virtual void Enter();
-	virtual void Input(DWORD);
-	virtual void Update(DWORD);
-	virtual void Draw(HDC);
-	virtual void Leave();
-	void GetState(const BYTE& wl);
-	void GetStand(const bool&);
-	void SetPosition(const Point& kpt, const Point& ppt, const bool& back);
-
-private :
-	DWORD update_dt;
-	DWORD update_delay;
-
-	bool Stand;
-	BYTE Wall;
-
-	Point KirbyPos;
-	Point PlayerPos;
-	Rect KirbyRect;
-	bool Rolling;
-	LONG MoveAcc;
-	LONG JumpAcc;
-	Rect Zone[ZoneMax];
-	bool BackPosition;
-	bool JumpEnd;
-	bool KeyPush;
-};
-class KirbyLanding : public state
-{
-public :
-	KirbyLanding();
-	virtual ~KirbyLanding();
-
-	virtual void Enter();
-	virtual void Input(DWORD);
-	virtual void Update(DWORD);
-	virtual void Draw(HDC);
-	virtual void Leave();
-	void GetState(const BYTE& wl);
-	void GetStand(const bool&);
-	void SetPosition(const Point& kpt, const Point& ppt, const bool& back);
-
-private :
-	DWORD update_dt;
-	DWORD update_delay;
-
-	bool Stand;
-	BYTE Wall;
-
-	Point KirbyPos;
-	Point PlayerPos;
-	Rect KirbyRect;
-	LONG MoveAcc;
-	LONG JumpAcc;
-	Rect Zone[ZoneMax];
-	bool BackPosition;
-	bool Landing;
-	bool KeyPush;
-};
-class KirbyFloat : public state
-{
-public :
-	KirbyFloat();
-	virtual ~KirbyFloat();
-
-	virtual void Enter();
-	virtual void Input(DWORD);
-	virtual void Update(DWORD);
-	virtual void Draw(HDC);
-	virtual void Leave();
-	void GetState(const BYTE& wl);
-	void GetStand(const bool&);
-	void SetPosition(const Point& kpt, const Point& ppt, const bool& back);
-
-private :
-	DWORD update_dt;
-	DWORD update_delay;
-
-	bool Stand;
-	BYTE Wall;
-
-	Point KirbyPos;
-	Point PlayerPos;
-	Rect KirbyRect;
-	LONG MoveAcc;
-	LONG JumpAcc;
-	Rect Zone[ZoneMax];
-	bool BackPosition;
-	bool Landing;
-	bool Float;
-	bool KirbyUp;
-	bool KeyPush;
-};
-//class KirbyDrain : public state
-//{
-//public :
-//	KirbyDrain();
-//	virtual ~KirbyDrain();
-//
-//	virtual void Enter();
-//	virtual void Input(DWORD);
-//	virtual void Update(DWORD);
-//	virtual void Draw(HDC);
-//	virtual void Leave();
-//	void GetState(const BYTE& wl);
-//	void GetStand(const bool&);
-//	void SetPosition(const Point& kpt, const Point& ppt, const bool& back);
-//
-//private :
-//	DWORD update_dt;
-//	DWORD update_delay;
-//
-//	bool Stand;
-//	BYTE Wall;
-//
-//	Point KirbyPos;
-//	Point PlayerPos;
-//	Rect KirbyRect;
-//	LONG MoveAcc;
-//	LONG JumpAcc;
-//	Rect Zone[ZoneMax];
-//	bool BackPosition;
-//	bool KeyPush;
-//};
